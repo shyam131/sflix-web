@@ -1,666 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>S-FLIX - December 2025</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SFLIX - December 2025</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#7f13ec",
+            "background-light": "#f7f6f8",
+            "background-dark": "#191022",
+            "surface-dark": "#2d1b3e",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["Roboto Mono", "monospace"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem", 
+            "lg": "0.5rem", 
+            "xl": "0.75rem", 
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
   <style>
-    :root {
-      --bg-primary: #0d0b1a;
-      --bg-card: #1a1528;
-      --text-primary: #f0e6ff;
-      --text-muted: #6b5f7a;
-      --neon-pink: #ff0080;
-      --neon-cyan: #00ffff;
-      --neon-purple: #8b5cf6;
-      --terminal-green: #00ff00;
-      --border: #3d2e5c;
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-
-    body {
-      font-family: "JetBrains Mono", monospace;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
+    .ascii-glow {
+      text-shadow: 0 0 10px rgba(127, 19, 236, 0.5), 0 0 20px rgba(127, 19, 236, 0.3);
     }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
+    .poster-hover-effect {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    header {
-      text-align: center;
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
+    .poster-hover-effect:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      z-index: 10;
     }
-
-    .ascii-logo {
-      font-size: clamp(0.4rem, 1.5vw, 0.7rem);
-      color: var(--neon-pink);
-      white-space: pre;
-      margin-bottom: 1rem;
-      text-shadow: 0 0 10px var(--neon-pink);
-    }
-
-    .broadcast-label {
-      display: inline-block;
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      color: var(--neon-cyan);
-      padding: 0.5rem 1.5rem;
-      border: 1px solid var(--neon-cyan);
-      margin-bottom: 1rem;
-      text-shadow: 0 0 10px var(--neon-cyan);
-    }
-
-    .month-title {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .divider {
-      text-align: center;
-      color: var(--neon-pink);
-      opacity: 0.3;
-      font-size: 0.7rem;
-      margin: 2rem 0;
-    }
-
-    .room-lean {
-      background: linear-gradient(135deg, #1a1528, #251d3a);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      position: relative;
-    }
-
-    .room-lean::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-cyan), transparent);
-    }
-
-    .room-lean h2 {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      color: var(--neon-pink);
-      margin-bottom: 1rem;
-      text-shadow: 0 0 10px var(--neon-pink);
-    }
-
-    .summary {
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
-      padding-left: 1rem;
-      border-left: 2px solid var(--neon-purple);
-      font-style: italic;
-    }
-
-    .lean-bullets {
-      list-style: none;
-      margin-bottom: 1rem;
-    }
-
-    .lean-bullets li {
-      padding: 0.5rem 0;
-      color: #a89ec2;
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .bullet-arrow {
-      color: var(--neon-cyan);
-      text-shadow: 0 0 5px var(--neon-cyan);
-    }
-
-    .tone-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tone-tag {
-      font-size: 0.65rem;
-      padding: 0.3rem 0.8rem;
-      background: rgba(255, 0, 128, 0.1);
-      border: 1px solid var(--neon-pink);
-      color: var(--neon-pink);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-header h2 {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--text-muted);
-    }
-
-    .section-header::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .movies-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 1024px) {
-      .movies-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .movies-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-
-    .movie-card,
-    .request-card {
-      position: relative;
-    }
-
-    .movie-poster,
-    .request-poster {
-      position: relative;
-      aspect-ratio: 2/3;
-      overflow: hidden;
-      background: var(--bg-card);
-      margin-bottom: 0.5rem;
-      border: 1px solid var(--border);
-    }
-
-    .poster-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .no-poster {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1a1528;
-    }
-
-    .no-poster span {
-      font-size: 2rem;
-      color: var(--neon-pink);
-      opacity: 0.3;
-    }
-
-    .rank-badge {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      width: 1.5rem;
-      height: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-primary);
-      border: 1px solid var(--neon-pink);
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--neon-pink);
-    }
-
-    .play-count {
-      position: absolute;
-      bottom: 0.5rem;
-      right: 0.5rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid var(--terminal-green);
-      font-size: 0.6rem;
-      color: var(--terminal-green);
-    }
-
-    .rating-badge {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 0.5rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid var(--neon-purple);
-      font-size: 0.6rem;
-      color: var(--neon-purple);
-    }
-
-    .status-badge {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.55rem;
-      background: rgba(0, 0, 0, 0.85);
-    }
-
-    .status-badge.available {
-      border: 1px solid #00ff00;
-      color: #00ff00;
-    }
-
-    .status-badge.processing {
-      border: 1px solid var(--neon-purple);
-      color: var(--neon-purple);
-    }
-
-    .status-badge.pending {
-      border: 1px solid #ffcc00;
-      color: #ffcc00;
-    }
-
-    .movie-info h3,
-    .request-info h4 {
-      font-size: 0.75rem;
-      font-weight: 500;
-      margin-bottom: 0.2rem;
-    }
-
-    .movie-info .year,
-    .request-info .meta {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      position: relative;
-    }
-
-    .stat-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--neon-cyan);
-    }
-
-    .stat-card h3 {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-    }
-
-    .stat-value {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 15px var(--neon-cyan);
-    }
-
-    .requester-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.7rem;
-    }
-
-    .requester-row:last-child {
-      border-bottom: none;
-    }
-
-    .requester-rank {
-      color: var(--neon-pink);
-    }
-
-    .requester-name {
-      flex: 1;
-      color: #a89ec2;
-    }
-
-    .requester-bar {
-      color: var(--neon-cyan);
-      font-size: 0.55rem;
-    }
-
-    .requester-count {
-      color: var(--text-muted);
-      min-width: 1.5rem;
-      text-align: right;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--neon-pink);
-      opacity: 0.4;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-text {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <pre class="ascii-logo">███████╗      ███████╗██╗     ██╗██╗  ██╗
-██╔════╝      ██╔════╝██║     ██║╚██╗██╔╝
-███████╗█████╗█████╗  ██║     ██║ ╚███╔╝
-╚════██║╚════╝██╔══╝  ██║     ██║ ██╔██╗
-███████║      ██║     ███████╗██║██╔╝ ██╗
-╚══════╝      ╚═╝     ╚══════╝╚═╝╚═╝  ╚═╝</pre>
-      <div class="broadcast-label">&#9670; BROADCAST &#9670;</div>
-      <h1 class="month-title">December 2025</h1>
-    </header>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
+  
+  <header class="sticky top-0 z-50 w-full border-b border-[#362348] bg-background-dark/90 backdrop-blur-md px-6 py-4">
+    <div class="mx-auto max-w-7xl flex items-center justify-between">
+      <div class="flex items-center gap-2"></div>
+    </div>
+  </header>
 
-    <div class="divider">├──┬──┼──┬──┼──┬──┼──┬──┼──┬──┤</div>
-
-    <section class="room-lean">
-      <h2>&#9670; WHAT THE ROOM LEANED TOWARD &#9670;</h2>
-      <p class="summary">"The signal was unclear this month."</p>
-      <ul class="lean-bullets">
-          <li><span class="bullet-arrow">&rarr;</span> Room lean data unavailable</li>
-      </ul>
-      <div class="tone-tags">
-          <span class="tone-tag">static</span>
-      </div>
-    </section>
-
-    <div class="divider">~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~</div>
-
-    <section>
-      <div class="section-header">
-        <h2>[TOP WATCHED]</h2>
-      </div>
-      <div class="movies-grid">
-
-        <div class="movie-card">
-          <div class="movie-poster">
-            <img src="https://image.tmdb.org/t/p/w500/chpWmskl3aKm1aTZqUHRCtviwPy.jpg" alt="Tron: Ares" loading="lazy" class="poster-img">
-            <div class="rank-badge">1</div>
-            <div class="play-count">3 plays</div>
-            <div class="rating-badge">&#9733; 6.6</div>
-          </div>
-          <div class="movie-info">
-            <h3>Tron: Ares</h3>
-            <span class="year">2025</span>
-          </div>
+  <main class="flex-grow">
+    
+    <!-- Hero Section -->
+    <section class="relative flex flex-col items-center justify-center pt-8 pb-10 px-4 text-center overflow-hidden">
+      <div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at center, #7f13ec 0%, transparent 70%);"></div>
+      <div class="relative z-10 w-full max-w-5xl">
+        <div class="mb-6 select-none overflow-x-auto hide-scrollbar">
+          <pre class="ascii-glow font-mono text-primary text-[10px] sm:text-xs md:text-sm lg:text-base leading-[1.1] font-bold whitespace-pre text-center">  ██████  ███████ ██      ██ ██   ██ 
+ ██       ██      ██      ██  ██ ██  
+ ███████  █████   ██      ██   ███   
+      ██  ██      ██      ██  ██ ██  
+ ██████   ██      ███████ ██ ██   ██ </pre>
         </div>
-
-        <div class="movie-card">
-          <div class="movie-poster">
-            <img src="https://image.tmdb.org/t/p/w500/uZZtpqivBbCt4Dimnzmg5aEl1CU.jpg" alt="Doin' It" loading="lazy" class="poster-img">
-            <div class="rank-badge">2</div>
-            <div class="play-count">1 plays</div>
-            <div class="rating-badge">&#9733; 6.3</div>
-          </div>
-          <div class="movie-info">
-            <h3>Doin' It</h3>
-            <span class="year">2024</span>
-          </div>
-        </div>
-
-        <div class="movie-card">
-          <div class="movie-poster">
-            <img src="https://image.tmdb.org/t/p/w500/dKL78O9zxczVgjtNcQ9UkbYLzqX.jpg" alt="The Running Man" loading="lazy" class="poster-img">
-            <div class="rank-badge">3</div>
-            <div class="play-count">1 plays</div>
-            <div class="rating-badge">&#9733; 6.8</div>
-          </div>
-          <div class="movie-info">
-            <h3>The Running Man</h3>
-            <span class="year">2025</span>
-          </div>
-        </div>
-
-        <div class="movie-card">
-          <div class="movie-poster">
-            <img src="https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg" alt="Five Nights at Freddy's" loading="lazy" class="poster-img">
-            <div class="rank-badge">4</div>
-            <div class="play-count">1 plays</div>
-            <div class="rating-badge">&#9733; 7.4</div>
-          </div>
-          <div class="movie-info">
-            <h3>Five Nights at Freddy's</h3>
-            <span class="year">2023</span>
-          </div>
-        </div>
-
-        <div class="movie-card">
-          <div class="movie-poster">
-            <img src="https://image.tmdb.org/t/p/w500/bSqt9rhDZx1Q7UZ86dBPKdNomp2.jpg" alt="It's a Wonderful Life" loading="lazy" class="poster-img">
-            <div class="rank-badge">5</div>
-            <div class="play-count">1 plays</div>
-            <div class="rating-badge">&#9733; 8.3</div>
-          </div>
-          <div class="movie-info">
-            <h3>It's a Wonderful Life</h3>
-            <span class="year">1946</span>
-          </div>
+        <div class="flex flex-row items-center justify-center gap-4 w-full max-w-[340px] mx-auto mb-4">
+          <a href="http://192.168.1.12:5055" target="_blank" class="flex-1 h-14 rounded-xl bg-surface-dark border border-white/10 hover:border-primary hover:bg-white/5 text-white font-bold text-base flex items-center justify-center gap-2 transition-all duration-300 shadow-lg group">
+            <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors">add_circle</span>
+            Request
+          </a>
+          <a href="http://192.168.1.12:32400/web" target="_blank" class="flex-1 h-14 rounded-xl bg-primary hover:bg-[#680fc2] text-white font-bold text-base flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_20px_rgba(127,19,236,0.4)] group">
+            <span class="material-symbols-outlined group-hover:scale-110 transition-transform">play_circle</span>
+            Watch
+          </a>
         </div>
       </div>
     </section>
 
-    <div class="divider">&gt;&gt;━━━━━━━━━━━━━━━━━━━━━━━━&gt;&gt;</div>
-
-    <section>
-      <div class="section-header">
-        <h2>[RECENT REQUESTS]</h2>
-      </div>
-      <div class="movies-grid">
-
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg" alt="Five Nights at Freddy's" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>Five Nights at Freddy's</h4>
-            <span class="meta">2023 &middot; rrshackleford</span>
-          </div>
+    <!-- Trending Now Section -->
+    <section class="py-8 px-4 md:px-8 border-t border-[#362348]">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">local_fire_department</span>
+            Trending Now
+          </h2>
         </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-items-center">
 
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/udAxQEORq2I5wxI97N2TEqdhzBE.jpg" alt="Five Nights at Freddy's 2" loading="lazy" class="poster-img">
-            <div class="status-badge processing">PROCESSING</div>
-          </div>
-          <div class="request-info">
-            <h4>Five Nights at Freddy's 2</h4>
-            <span class="meta">2025 &middot; rrshackleford</span>
-          </div>
-        </div>
+            <a class="group block w-full max-w-[200px]" href="https://www.themoviedb.org/search?query=Tron%3A%20Ares" target="_blank">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500/chpWmskl3aKm1aTZqUHRCtviwPy.jpg');"></div>
+                <div class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-primary font-mono font-bold text-lg">
+                  1
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-1 flex items-center gap-1 bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-white text-xs font-mono">
+                  <span class="material-symbols-outlined text-[14px] text-primary">star</span> 6.6
+                </div>
+              </div>
+              <h3 class="text-white font-mono font-bold text-lg truncate">Tron: Ares</h3>
+              <p class="text-gray-500 font-mono text-sm">2025</p>
+            </a>
 
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/dKL78O9zxczVgjtNcQ9UkbYLzqX.jpg" alt="The Running Man" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>The Running Man</h4>
-            <span class="meta">2025 &middot; srpate4</span>
-          </div>
-        </div>
+            <a class="group block w-full max-w-[200px]" href="https://www.themoviedb.org/search?query=Doin'%20It" target="_blank">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500/uZZtpqivBbCt4Dimnzmg5aEl1CU.jpg');"></div>
+                <div class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-primary font-mono font-bold text-lg">
+                  2
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-1 flex items-center gap-1 bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-white text-xs font-mono">
+                  <span class="material-symbols-outlined text-[14px] text-primary">star</span> 6.3
+                </div>
+              </div>
+              <h3 class="text-white font-mono font-bold text-lg truncate">Doin' It</h3>
+              <p class="text-gray-500 font-mono text-sm">2024</p>
+            </a>
 
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/1tUOZQDgZaGqZtrB21MieiXARL2.jpg" alt="The Great Flood" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>The Great Flood</h4>
-            <span class="meta">2025 &middot; srpate4</span>
-          </div>
-        </div>
+            <a class="group block w-full max-w-[200px]" href="https://www.themoviedb.org/search?query=The%20Running%20Man" target="_blank">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500/dKL78O9zxczVgjtNcQ9UkbYLzqX.jpg');"></div>
+                <div class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-primary font-mono font-bold text-lg">
+                  3
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-1 flex items-center gap-1 bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-white text-xs font-mono">
+                  <span class="material-symbols-outlined text-[14px] text-primary">star</span> 6.8
+                </div>
+              </div>
+              <h3 class="text-white font-mono font-bold text-lg truncate">The Running Man</h3>
+              <p class="text-gray-500 font-mono text-sm">2025</p>
+            </a>
 
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/gDVgC9jd917NdAcqBdRRDUYi4Tq.jpg" alt="Avatar: Fire and Ash" loading="lazy" class="poster-img">
-            <div class="status-badge processing">PROCESSING</div>
-          </div>
-          <div class="request-info">
-            <h4>Avatar: Fire and Ash</h4>
-            <span class="meta">2025 &middot; srpate4</span>
-          </div>
-        </div>
+            <a class="group block w-full max-w-[200px]" href="https://www.themoviedb.org/search?query=Five%20Nights%20at%20Freddy's" target="_blank">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg');"></div>
+                <div class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-primary font-mono font-bold text-lg">
+                  4
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-1 flex items-center gap-1 bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-white text-xs font-mono">
+                  <span class="material-symbols-outlined text-[14px] text-primary">star</span> 7.4
+                </div>
+              </div>
+              <h3 class="text-white font-mono font-bold text-lg truncate">Five Nights at Freddy's</h3>
+              <p class="text-gray-500 font-mono text-sm">2023</p>
+            </a>
 
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/6w0TKhfR0Rzby5SXxgfuI99Jrva.jpg" alt="The Girl with the Dragon Tattoo" loading="lazy" class="poster-img">
-            <div class="status-badge processing">PROCESSING</div>
-          </div>
-          <div class="request-info">
-            <h4>The Girl with the Dragon Tattoo</h4>
-            <span class="meta">2009 &middot; srpate4</span>
-          </div>
-        </div>
-
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/8bokS83zGdhaXgN9tjidUKmAftW.jpg" alt="The Girl with the Dragon Tattoo" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>The Girl with the Dragon Tattoo</h4>
-            <span class="meta">2011 &middot; srpate4</span>
-          </div>
-        </div>
-
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/8FHOtUpNIk5ZPEay2N2EY5lrxkv.jpg" alt="Dhurandhar" loading="lazy" class="poster-img">
-            <div class="status-badge processing">PROCESSING</div>
-          </div>
-          <div class="request-info">
-            <h4>Dhurandhar</h4>
-            <span class="meta">2025 &middot; rishi_p3</span>
-          </div>
-        </div>
-
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/jNsttCWZyPtW66MjhUozBzVsRb7.jpg" alt="Sisu: Road to Revenge" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>Sisu: Road to Revenge</h4>
-            <span class="meta">2025 &middot; shyam131</span>
-          </div>
-        </div>
-
-        <div class="request-card">
-          <div class="request-poster">
-            <img src="https://image.tmdb.org/t/p/w500/bSqt9rhDZx1Q7UZ86dBPKdNomp2.jpg" alt="It's a Wonderful Life" loading="lazy" class="poster-img">
-            <div class="status-badge available">AVAILABLE</div>
-          </div>
-          <div class="request-info">
-            <h4>It's a Wonderful Life</h4>
-            <span class="meta">1946 &middot; shyam131</span>
-          </div>
+            <a class="group block w-full max-w-[200px]" href="https://www.themoviedb.org/search?query=It's%20a%20Wonderful%20Life" target="_blank">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500/bSqt9rhDZx1Q7UZ86dBPKdNomp2.jpg');"></div>
+                <div class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-primary font-mono font-bold text-lg">
+                  5
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-1 flex items-center gap-1 bg-black/60 backdrop-blur-sm border border-primary/30 rounded text-white text-xs font-mono">
+                  <span class="material-symbols-outlined text-[14px] text-primary">star</span> 8.3
+                </div>
+              </div>
+              <h3 class="text-white font-mono font-bold text-lg truncate">It's a Wonderful Life</h3>
+              <p class="text-gray-500 font-mono text-sm">1946</p>
+            </a>
         </div>
       </div>
     </section>
 
-    <div class="divider">├──┬──┼──┬──┼──┬──┼──┬──┼──┬──┤</div>
+    <!-- Recent Requests Section -->
+    <section class="py-8 px-4 md:px-8 bg-surface-dark/20 border-t border-[#362348]">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+            Recent Requests
+          </h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-items-center">
 
-    <section class="stats-grid">
-      <div class="stat-card">
-        <h3>// TOTAL REQUESTS</h3>
-        <div class="stat-value">30</div>
-      </div>
-      <div class="stat-card">
-        <h3>// TOP REQUESTERS</h3>
-
-            <div class="requester-row">
-              <span class="requester-rank">[01]</span>
-              <span class="requester-name">shyam131</span>
-              <span class="requester-bar">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span>
-              <span class="requester-count">12</span>
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">Five Nights at Freddy's</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">yesterday</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2023</p>
             </div>
 
-            <div class="requester-row">
-              <span class="requester-rank">[02]</span>
-              <span class="requester-name">srpate4</span>
-              <span class="requester-bar">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9617;</span>
-              <span class="requester-count">9</span>
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/udAxQEORq2I5wxI97N2TEqdhzBE.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-yellow-900/80 border-yellow-500/50 text-yellow-300 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Processing
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">Five Nights at Freddy's 2</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">yesterday</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
             </div>
 
-            <div class="requester-row">
-              <span class="requester-rank">[03]</span>
-              <span class="requester-name">mandyhornbuckle</span>
-              <span class="requester-bar">&#9608;&#9608;&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;</span>
-              <span class="requester-count">4</span>
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/dKL78O9zxczVgjtNcQ9UkbYLzqX.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">The Running Man</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">2d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
             </div>
 
-            <div class="requester-row">
-              <span class="requester-rank">[04]</span>
-              <span class="requester-name">rrshackleford</span>
-              <span class="requester-bar">&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;</span>
-              <span class="requester-count">2</span>
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/1tUOZQDgZaGqZtrB21MieiXARL2.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">The Great Flood</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">2d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
             </div>
 
-            <div class="requester-row">
-              <span class="requester-rank">[05]</span>
-              <span class="requester-name">rishi_p3</span>
-              <span class="requester-bar">&#9608;&#9608;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;</span>
-              <span class="requester-count">2</span>
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/gDVgC9jd917NdAcqBdRRDUYi4Tq.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-yellow-900/80 border-yellow-500/50 text-yellow-300 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Processing
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">Avatar: Fire and Ash</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">2d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
             </div>
+
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/6w0TKhfR0Rzby5SXxgfuI99Jrva.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-yellow-900/80 border-yellow-500/50 text-yellow-300 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Processing
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">The Girl with the Dragon Tattoo</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">4d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2009</p>
+            </div>
+
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/8bokS83zGdhaXgN9tjidUKmAftW.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">The Girl with the Dragon Tattoo</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">4d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2011</p>
+            </div>
+
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/8FHOtUpNIk5ZPEay2N2EY5lrxkv.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-yellow-900/80 border-yellow-500/50 text-yellow-300 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Processing
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">Dhurandhar</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">5d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
+            </div>
+
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/jNsttCWZyPtW66MjhUozBzVsRb7.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">Sisu: Road to Revenge</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">5d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">2025</p>
+            </div>
+
+            <div class="group block w-full max-w-[200px]">
+              <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-surface-dark shadow-lg poster-hover-effect ring-1 ring-white/10 group-hover:ring-primary/50">
+                <div class="absolute inset-0 bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity" style="background-image: url('https://image.tmdb.org/t/p/w500/bSqt9rhDZx1Q7UZ86dBPKdNomp2.jpg');"></div>
+                <div class="absolute top-2 right-2 px-2 py-1 bg-green-900/80 border-green-500/50 text-green-400 backdrop-blur-sm border rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                  Available
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-mono font-bold text-base truncate pr-2">It's a Wonderful Life</h3>
+                <span class="text-xs text-gray-500 font-mono whitespace-nowrap">5d ago</span>
+              </div>
+              <p class="text-gray-500 font-mono text-xs">1946</p>
+            </div>
+        </div>
       </div>
     </section>
 
-    <footer>
-      <p class="footer-label">░▒▓█▓▒░ SUBLINGUAL RADIO ░▒▓█▓▒░</p>
-      <p class="footer-text">S-FLIX &middot; A private film library that grows through requests, not algorithms.</p>
-    </footer>
-  </div>
+  </main>
+
+  <footer class="bg-background-dark border-t border-[#362348] py-16 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(circle at center bottom, #7f13ec 0%, transparent 60%);"></div>
+    <div class="max-w-4xl mx-auto flex flex-col items-center justify-center gap-8 relative z-10 text-center font-mono">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold tracking-widest">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-[pulse_2s_infinite]"></span>
+        STATUS :: ONLINE
+      </div>
+      <div class="flex flex-col gap-2 text-gray-400 text-sm">
+        <p class="hover:text-primary transition-colors cursor-default">💛 Be kind — please request more</p>
+        <p class="hover:text-primary transition-colors cursor-default">🛟 S-Flix is always here for you</p>
+      </div>
+      <div class="text-primary/30 text-sm tracking-[0.5em] select-none">
+        ∙∘○◎○∘∙
+      </div>
+      <div class="text-primary font-bold text-lg sm:text-xl tracking-wider animate-[pulse_3s_ease-in-out_infinite]">
+        ░▒▓█ THANK YOU █▓▒░
+      </div>
+      <div class="mt-4 text-gray-600 text-xs tracking-widest uppercase">
+        :: December 2025 ::
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
